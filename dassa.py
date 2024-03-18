@@ -1,20 +1,24 @@
-import pyautogui as pya
-import time
+import pandas as pd
+import flet as ft
 
-def noaguardode(e):
-    cont=0
-    while cont<4:
-        try:
-            imaaagem = pya.locateCenterOnScreen(e, grayscale=True)
-            print("VAMOO krlho!!!")
-            time.sleep(1)
-            break
-        except:
-            time.sleep(1)
-            cont+=1
-            print("esperando")
-            pass
+# Cria um DataFrame do pandas
+df = pd.DataFrame({
+    'First name': ['John', 'Jack', 'Alice'],
+    'Last name': ['Smith', 'Brown', 'Wong'],
+    'Age': [43, 19, 25]
+})
 
-pya.locateOnScreen(r"C:\Users\jur.pedrorenan\Documents\automações\Suits\Imagens\1_buscar.png")
+def main(page: ft.Page):
+    # Converte o DataFrame do pandas para uma tabela Flet
+    page.add(
+        ft.DataTable(
+            columns=[ft.DataColumn(ft.Text(name)) for name in df.columns],
+            rows=[
+                ft.DataRow(
+                    cells=[ft.DataCell(ft.Text(str(value))) for value in row]
+                ) for row in df.values
+            ],
+        ),
+    )
 
-#noaguardode(r"C:\Users\jur.pedrorenan\Documents\automações\Suits\Imagens\buscarprocesso.png")
+ft.app(target=main)
