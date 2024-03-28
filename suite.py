@@ -143,8 +143,8 @@ def automation(resposta, pasta, zipadooudocx):
         for i,v in enumerate(df[f"{arquivo}"]):
             print(i,v)
             try:
-                noaguardode("2pesquisa.png", "aguardo do botão pesquisa")
-                pya.click(pya.locateCenterOnScreen("2pesquisa.png", confidence=0.8))
+                noaguardode("3buscarpesquisa.png", "aguardo do botão pesquisa")
+                pya.click(pya.locateCenterOnScreen("3buscarpesquisa.png", confidence=0.8))
                 try:
                     imagem = pya.locateCenterOnScreen("3errorsemafor", confidence=0.8)
                     pya.click(pya.locateCenterOnScreen("2ok.png", confidence=0.7))
@@ -181,8 +181,8 @@ def automation(resposta, pasta, zipadooudocx):
                     pya.click(662, 445)
                     noaguardode("1pastadedowloads.png", "no aguardo da pasta de downloadss")
                     pya.click(pya.locateCenterOnScreen("2suite.png", confidence=0.8))
-                    noaguardode("2pesquisa.png", "aguardo de botão de pesquisa")
-                    pya.click(pya.locateCenterOnScreen("2pesquisa.png", confidence=0.8))
+                    noaguardode("3buscarpesquisa.png", "aguardo de botão de pesquisa")
+                    pya.click(pya.locateCenterOnScreen("3buscarpesquisa.png", confidence=0.8))
                     noaguardode("2_busca.png", "aguardo do botão buscar")
                     busca = pya.locateCenterOnScreen("2_busca.png", confidence=0.8)
                     pya.click(busca.x+50, busca.y)
