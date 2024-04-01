@@ -5,7 +5,7 @@ import pandas as pd
 import os
 import warnings
 from docx2python import docx2python
-import re
+import zipfile
 import pyperclip
 warnings.filterwarnings("ignore")
 
@@ -103,37 +103,37 @@ def automation(resposta, pasta, zipadooudocx):
 
 
     # %%
-    def zipararquivo():
-        pya.PAUSE = 2.5
-        pya.alert("vai começar a zipar as pastas, não mexa no mouse e teclado")
-        pya.hotkey("win", "r")
-        time.sleep(0.7)
-        pya.write(caminho_da_pasta)
-        pya.press("Enter")
-        time.sleep(1.5)
-        try:
-            pya.click(pya.locateCenterOnScreen("1telacheia.png", confidence=0.8))
-        except:
-            pass
-        for i in df["Processo"]:
-            time.sleep(1.5)
-            pya.click(1208,161)
-            pya.write(i)
-            noaguardode("1wordzip.png", "dsidji")
-            pya.rightClick(249 ,196)
-            time.sleep(0.7)
-            pya.click(315, 462)
-        pya.alert("concluido, pastas zipadas")
+    def zipararquivo(directory):
+    
+        def zip_folders_in_directory(directory):
+            for root, dirs, files in os.walk(directory):
+                for folder in dirs:
+                    folder_path = os.path.join(root, folder)
+                    zip_folder(folder_path)
+
+        def zip_folder(folder_path):
+            output_zip = folder_path + '.zip'
+            with zipfile.ZipFile(output_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
+                for root, dirs, files in os.walk(folder_path):
+                    for file in files:
+                        file_path = os.path.join(root, file)
+                        arcname = os.path.relpath(file_path, folder_path)
+                        zipf.write(file_path, arcname)
+
+        zip_folders_in_directory(directory)
+
         
     try:
         if resposta1=="NÃO":
-            zipararquivo()
+            source_directory = caminho_da_pasta
+            zipararquivo(source_directory)
+            
     except:
         pass
     
 
     # %%
-    def automação(arquivo, texto,  imagemrar):
+    def automação(arquivo, texto,  imagemrar, filesubmited):
         pya.alert("""Requisitos para começar o código.
                 - Uma pasta no suite chamada 'pasta de download com os mesmo arquivos que voce quer baixar 
                 - A vizualização do explorador de arquivos do suite tem que está no 'details'
@@ -269,7 +269,7 @@ def automation(resposta, pasta, zipadooudocx):
 
                 time.sleep(5)
                 pya.click()
-                noaguardode("2arquivoanexado.png", "aguardando o arquivo ser anexado")
+                noaguardode(f"{filesubmited}", "aguardando o arquivo ser anexado")
                 try: 
                     imagem = pya.locateCenterOnScreen("3errorindata.png", confidence=0.8)
                     pya.click(imagem)
@@ -391,9 +391,9 @@ def automation(resposta, pasta, zipadooudocx):
 
     # %%
     if resposta==".docx":
-        automação("Nomes", "Processo", "1word.png")
+        automação("Nomes", "Processo", "1word.png", "2arquivoanexado.png")
     elif resposta==".zip":
-        automação("Processo", "Processo", "2rar.png")
+        automação("Processo", "Processo", "2rar.png", "2raranexado.png")
 
     total_processo = df["Processo"].count()
 
