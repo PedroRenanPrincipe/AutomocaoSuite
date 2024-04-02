@@ -5,7 +5,7 @@ import pandas as pd
 import os
 import warnings
 from docx2python import docx2python
-import zipfile
+import shutil
 import pyperclip
 warnings.filterwarnings("ignore")
 
@@ -103,30 +103,25 @@ def automation(resposta, pasta, zipadooudocx):
 
 
     # %%
-    def zipararquivo(directory):
+    def compactar_pasta_para_rar(caminho_pasta, nome_arquivo_rar, output_pasta):
+    # Compacta a pasta para um arquivo zip
+        shutil.make_archive(nome_arquivo_rar, 'zip', caminho_pasta)
     
-        def zip_folders_in_directory(directory):
-            for root, dirs, files in os.walk(directory):
-                for folder in dirs:
-                    folder_path = os.path.join(root, folder)
-                    zip_folder(folder_path)
+    # Renomeia o arquivo zip para .rar
+        os.rename(nome_arquivo_rar + '.zip', nome_arquivo_rar + '.rar')
 
-        def zip_folder(folder_path):
-            output_zip = folder_path + '.zip'
-            with zipfile.ZipFile(output_zip, 'w', zipfile.ZIP_DEFLATED) as zipf:
-                for root, dirs, files in os.walk(folder_path):
-                    for file in files:
-                        file_path = os.path.join(root, file)
-                        arcname = os.path.relpath(file_path, folder_path)
-                        zipf.write(file_path, arcname)
-
-        zip_folders_in_directory(directory)
+        shutil.move(nome_arquivo_rar + '.rar', output_pasta)
+        
 
         
     try:
         if resposta1=="NÃO":
-            source_directory = caminho_da_pasta
-            zipararquivo(source_directory)
+            pya.alert("Vai começar a zipar as pastas")
+            arquivoss = os.listdir(caminho_da_pasta)
+            for i in arquivoss:
+                compactar_pasta_para_rar(os.path.join(caminho_da_pasta,i), i, caminho_da_pasta)
+                
+            pya.alert("pastas zipadas")
             
     except:
         pass
