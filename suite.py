@@ -9,7 +9,9 @@ import zipfile
 import pyperclip
 warnings.filterwarnings("ignore")
 
-def automation(resposta, pasta, zipadooudocx):
+def automation(resposta, pasta, zipadooudocx, nomedoarquivo):
+    global stopflag
+    stopflag = False
 # %%
     def pesquisar(e):
         try:
@@ -142,6 +144,8 @@ def automation(resposta, pasta, zipadooudocx):
         time.sleep(1)
         for i,v in enumerate(df[f"{arquivo}"]):
             print(i,v)
+            if stopflag:
+                break
             try:
                 noaguardode("3buscarpesquisa.png", "aguardo do botão pesquisa")
                 pya.click(pya.locateCenterOnScreen("3buscarpesquisa.png", confidence=0.8))
@@ -399,7 +403,9 @@ def automation(resposta, pasta, zipadooudocx):
 
     print(df)
     # %%
-    df.to_excel(caminho_da_pasta+r"\relatório laudinho.xlsx", index=False)
+    df.to_excel(os.path.join(caminho_da_pasta, f"{nomedoarquivo}.xlsx"), index=False)
 
-
+def stop_automation(e):
+    global stopflag
+    stopflag=True
 

@@ -1,7 +1,7 @@
 import flet as ft 
 import pandas as pd 
 import os
-from suite import automation
+from suite import automation, stop_automation
 import time
 from dassa import texto
 
@@ -55,7 +55,12 @@ def main(page: ft.Page):
         def executar(e):
             arquivos = os.listdir(file_picker.result.path)
             tinicial = time.time()
-            automation(tipodedocumento.value, file_picker.result.path, pasta_zipada.value)
+            result_view.controls.append(ft.Column([ft.Text(""),
+                                                   ft.Row([
+                ft.ElevatedButton("Interromper", on_click=stop_automation)], ft.MainAxisAlignment.CENTER)
+            ], ft.MainAxisAlignment.CENTER))
+            page.update()
+            automation(tipodedocumento.value, file_picker.result.path, pasta_zipada.value, file_name.value)
             tfinal = time.time()
             total_time = tfinal - tinicial
             result_view.controls.append(ft.Row(
@@ -111,6 +116,8 @@ def main(page: ft.Page):
 
         )
 
+        file_name = ft.TextField(label="nome da planilha de extração?")
+
         result_view = ft.Column()
 
         page.add(ft.Container(
@@ -121,15 +128,17 @@ def main(page: ft.Page):
         ft.MainAxisAlignment.CENTER),]), padding=40))
         
         page.add(ft.Container(
-            content= ft.Column([
-        ft.Row([
-        ft.ElevatedButton("Selecionar a pasta",icon= ft.icons.FOLDER, on_click= lambda _: file_picker.get_directory_path(dialog_title=
+            content= 
+            ft.Column([
+        ft.Row([ft.ElevatedButton("Selecionar a pasta",icon= ft.icons.FOLDER, on_click= lambda _: file_picker.get_directory_path(dialog_title=
                         "Pasta dos arquivos"))], ft.MainAxisAlignment.CENTER),
-        
+        ft.Text(""),
+        ft.Row([file_name], ft.MainAxisAlignment.CENTER),
         ft.Text(""),
         ft.Row([tipodedocumento], ft.MainAxisAlignment.CENTER),
         ft.Text(""),
-        result_view]), padding=30))
+        ft.Row([
+        result_view], ft.MainAxisAlignment.CENTER)]), padding=30))
         
         page.update()
 
