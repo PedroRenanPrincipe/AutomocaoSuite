@@ -196,7 +196,10 @@ def automation(resposta, pasta, zipadooudocx, nomedoarquivo):
                 except: 
                     pass
                 time.sleep(3)
-                pya.doubleClick(501,250)
+                try:
+                    pya.doubleClick(pya.locateCenterOnScreen("1enel.png", confidence=0.8))
+                except:
+                    pya.doubleClick(501,250)
                 
 
                 funcionando()
